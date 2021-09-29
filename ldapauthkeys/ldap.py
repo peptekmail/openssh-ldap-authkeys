@@ -21,6 +21,20 @@ def connect_to_ldap(address, authdn, authpw, timeout):
 
     handle.set_option(ldap.OPT_PROTOCOL_VERSION, ldap.VERSION3)
 
+    # SSLv3 and SSLv2 are insecure
+    # OpenLDAP 2.4 sets minimum version with SSL_CTX_set_options(). The
+    # system-wide crypto-policies for TLS minimum version are applied
+    # with SSL_CTX_set_min_proto_version(). The set_option() call cannot
+    # enable lower versions than allowed by crypto-policy, e.g.
+    # openssl.cnf MinProtocol=TLS1.2 + OPT_X_TLS_PROTOCOL_MIN=TLS1.0
+    # result in TLS 1.2 as minimum protocol version.
+    handle.set_option(ldap.OPT_X_TLS_PROTOCOL_MIN, 0x301)  # TLS 1.0
+    # libldap defaults to cert validation, but the default can be
+    # overridden in global or user local ldap.conf.
+    handle.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_DEMAND)
+    # reinitialize TLS context to materialize settings
+    handle.set_option(ldap.OPT_X_TLS_NEWCTX, 0)
+
     if authdn is not None and authpw is not None:
         result = handle.simple_bind_s(authdn, authpw)
 
