@@ -1,7 +1,6 @@
-import pytest
 import unittest
-
 from ldapauthkeys.config import *
 
-def test_config():
-  assertNotNull(load_config())
+class TestMyCode(unittest.TestCase):
+  def test_config(self):
+    self.assertNotNull(load_config())
