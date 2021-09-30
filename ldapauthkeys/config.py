@@ -97,9 +97,6 @@ def load_config():
     Search for the configuration file, load it and populate any unset items with
     default values.
     """
-    try:
-        return _cached_config
-    except UnboundLocalError as e:
-        _cached_config = _load_config()
+    global _cached_config = _load_config()
 
     return _cached_config
