@@ -97,6 +97,7 @@ def load_config():
     Search for the configuration file, load it and populate any unset items with
     default values.
     """
-    global _cached_config = _load_config()
-
+    global _cached_config 
+    _cached_config = _load_config()
+    
     return _cached_config
