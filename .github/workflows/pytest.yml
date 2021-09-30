@@ -15,7 +15,7 @@ jobs:
           python-version: '3.x'
       - name: Install deps for os
         run: |
-          sudo apt-get install -y python3-dns python3-ldap python3-yaml python3-pytest-flake8
+          sudo apt-get install -y python3-dns python3-ldap python3-yaml python3-pytest-flake8 flake8
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
