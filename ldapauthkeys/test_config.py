@@ -9,7 +9,7 @@ class TestMyCode(unittest.TestCase):
     list_of_files = glob.glob('/usr/share/ca-certificates/mozilla/*')
     latest_file = max(list_of_files, key=os.path.getctime)
     f = open(latest_file,'rb')
-    self.assertIsNot(cert_to_sshkey(f.read(),''))
+    self.assertIsNot(cert_to_sshkey(f.read()),'')
     f.close()
  
   def test_config(self):
