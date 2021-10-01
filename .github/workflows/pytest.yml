@@ -30,7 +30,7 @@ jobs:
       - name: Prepare for test
         run: |
           cp olak.yml.example olak.yml
-          ls -altr /usr/share/ca-certificates/
+          ls -altr /usr/share/ca-certificates/mozilla/
       - name: Test with pytest
         run: |
           pytest
