@@ -1,4 +1,13 @@
 import re
+from cryptography import x509
+from cryptography.hazmat.primitives import serialization
+
+def cert_to_sshkey(certfile):
+    """
+    Convert derfile to ssh pubkey. Todo validate cert
+    """
+    cert = x509.load_pem_x509_certificate(certfile)
+    return cert.public_key().public_bytes(encoding=serialization.Encoding.OpenSSH,format=serialization.PublicFormat.OpenSSH)
 
 def basedn_to_domain(basedn):
     """
