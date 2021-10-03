@@ -182,8 +182,12 @@ def fetch_ldap_authkeys(handle, config, searches):
             # Decode SSH keys as UTF-8
             ssh_keys = []
             for k in attrs[config_attributes['ssh_key']]:
-                ssh_keys.append(k.decode('utf-8'))
-
+                try:
+                    ssh_keys.append(k.decode('utf-8'))
+                except UnicodeDecodeError:
+                    #ssh_key was not a string, it is probably a certificate.
+                    ssh_keys.append(cert_to_sshkey(k))
+                    
             # Produce output
             # Note that this assumes no duplicates. If you have a duplicate
             # LDAP entry, for example two users in different OUs with the same
