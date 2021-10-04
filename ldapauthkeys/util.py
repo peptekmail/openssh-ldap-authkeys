@@ -1,13 +1,23 @@
 import re
 from cryptography import x509
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend 
+from asn1crypto import pem
+from asn1crypto import x509 as asn1x509
 
 def cert_to_sshkey(certfile):
     """
     Convert derfile to ssh pubkey. Todo validate cert
     """
-    cert = x509.load_pem_x509_certificate(certfile)
-    return cert.public_key().public_bytes(encoding=serialization.Encoding.OpenSSH,format=serialization.PublicFormat.OpenSSH)
+    try:
+        cert = x509.load_pem_x509_certificate(certfile, backend=default_backend())
+        return cert.public_key().public_bytes(encoding=serialization.Encoding.OpenSSH,format=serialization.PublicFormat.OpenSSH)
+    except Exception:
+        #cryptography failed to parse the cert, do it step by step
+        key_type, algo, data = pem.unarmor(certfile)
+        k = asn1x509.Certificate.load(data)
+        a = serialization.load_der_public_key(k.public_key())
+        return a.public_bytes(encoding=serialization.Encoding.OpenSSH,format=serialization.PublicFormat.OpenSSH)
 
 def basedn_to_domain(basedn):
     """
