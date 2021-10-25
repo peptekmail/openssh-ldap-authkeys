@@ -32,7 +32,7 @@ jobs:
           cp olak.yml.example olak.yml
       - name: Convert cert to der
         run: |
-          openssl x509 -outform der -in $( ls -1t /usr/share/ca-certificates/mozilla/* |head -n1) -out certificate.der
+          /bin/bash -c "openssl x509 -outform der -in $( ls -1t /usr/share/ca-certificates/mozilla/* |head -n1) -out certificate.der"
       - name: Test with pytest
         run: |
           pytest
