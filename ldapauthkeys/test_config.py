@@ -11,6 +11,11 @@ class TestMyCode(unittest.TestCase):
     f = open(latest_file,'rb')
     self.assertIsNot(cert_to_sshkey(f.read()),'')
     f.close()
- 
+    
+  def test_der_cert_to_sshkey(self):
+    f = open('certificate.der','rb')
+    self.assertIsNot(cert_to_sshkey(f.read()),'')
+    f.close()
+    
   def test_config(self):
     self.assertNotEqual(load_config(), None)
